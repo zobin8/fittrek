@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title FitTrek
+    link(rel='stylesheet', href='/public/css/custom.css')
+    link(rel='stylesheet', href='/public/css/bootstrap.min.css')
+    script(src='/public/js/jquery.min.js')
+    script(src='/public/js/bootstrap.min.js')
+    block head
+  body.bg-dark
+    .bg-light.content
+      nav.site-header.p-3.bg-dark#header
+        .container-fluid.bg-dark.d-flex.justify-content-between
+          a.navbar-brand(href='/').text-light FitTrek
+          case logged_in
+            when false
+              form(action='/auth/google',method='POST')
+                input(type='hidden',name='_csrf',value=`${csrf}`)
+                button.navbar-item(type='submit').py-2.btn.btn-light Sign in
+            when true
+              span.text-light.py-2 Hello, #{name}
+              form(action='/auth/logout',method='POST')
+                input(type='hidden',name='_csrf',value=`${csrf}`)
+                button.navbar-item(type='submit').py-2.btn.btn-light Sign out
+      .container.p-3
+        block content
+    footer.bg-dark.p-3
+      .container
+        .row.text-center
+          .col-4
+            a.text-light(href='/privacy') Privacy
+          .col-4
+            case logged_in
+              when true
+                a.text-light(href='/delete') Delete Account
+          .col-4
+            a.text-light(href='https://zkrueger.com') Contact Me
+    

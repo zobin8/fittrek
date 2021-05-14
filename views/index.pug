@@ -1,0 +1,31 @@
+extends layout
+
+block append head
+  script(src='/public/js/trekmap.js')
+  script(src='/public/js/trekmap-all.js')
+
+block content
+  .py-3
+    h1 Track your workouts on virtual hikes
+    p
+      | With FitTrek, you can apply the amount you move to a number of distance challenges. See your workouts, whether it is treadmill running, biking, or others, in perspective by applying its distance to a map. 
+      case logged_in
+        when false
+          | Sign in now and start tracking!
+        when true
+          | You have a balance of #{distance}. You can apply this to any of the below treks.
+  .row.row-cols-1.row-cols-md-2
+    each trek in treks
+      .col-lg-4.mb-4
+        .card
+          .card-img-top
+            img.img-source(src=trek.img)
+            canvas.map(width=trek.width,height=trek.height,id=`map-${trek.trek}`)
+            case trek.copyright
+              when "osm"
+                .text-right.copyright-container
+                  span.copyright.bg-light © OpenStreetMap Contributors
+          .card-body.text-center
+            h4.card-title #{trek.name}
+              span.badge.badge-pill.ml-2.badge-secondary= trek.maxdist
+            a.btn.btn-primary.stretched-link(href=trek.href) View trek

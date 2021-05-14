@@ -1,0 +1,65 @@
+extends layout
+
+block append head
+  script(src='/public/js/trekmap.js')
+  script(src='/public/js/trekmap-one.js')
+
+block content
+  h1= title
+  .row
+    .col-lg-8.p-2
+      .container.p-0.m-0
+        img.img-source.pr-3(src=image)
+        canvas.map(width=mapwidth,height=mapheight,id=`map-${trek}`)
+      case copyright
+        when "osm"
+          .text-right.copyright-container
+            span.copyright.bg-light © OpenStreetMap Contributors
+      .card.text-center.mt-4
+        .card-header
+          .progress#progress
+            case complete
+              when false
+                .progress-bar.bg-primary(role='progressbar',aria-valuemin=0,aria-valuenow=currdist,aria-valuemax=maxdist,style=`width:${currpct}%;`)
+                  span.sr-only #{currdist} / #{maxdist}
+                .progress-bar.bg-info(role='progressbar',aria-valuemin=0,aria-valuenow=apply,aria-valuemax=maxdist,style=`width:${applypct}%;`)
+                  span.sr-only #{balance} / #{maxdist}
+              when true
+                .progress-bar.bg-warning(role='progressbar',aria-valuemin=0,aria-valuenow=maxdist,aria-valuemax=maxdist,style='width:100%;')
+        .card-body
+          h4.card-title
+            case complete
+              when false
+                | #{currdist} traveled of #{maxdist}
+              when true
+                | Completed #{maxdist}!
+          case logged_in
+            when true
+              p.card-text You have an available balance of #{balance}. You can apply this to any trek.
+            when false
+              p.card-text Log in now to start tracking distance that you can apply to any trek.
+          case logged_in
+            when true
+              case complete
+                when false
+                  form(action=`/trek/apply/${trek}`,method='POST')
+                    input(type='hidden',name='_csrf',value=`${csrf}`)
+                    button.btn.btn-info(type='submit') Apply to Trek
+                when true
+                  button.btn.btn-secondary.disabled(type='submit') Apply to Trek
+            when false
+              button.btn.btn-secondary.disabled(type='submit') Apply to Trek
+
+    .col-lg-4.p-2
+        each cp in checkpoints
+          h2= cp.name
+            case cp.state
+              when 0
+                span.badge.badge-small.badge-pill.ml-2.badge-secondary= cp.dist
+              when 1
+                span.badge.badge-small.badge-pill.ml-2.badge-info= cp.dist
+              when 2
+                span.badge.badge-small.badge-pill.ml-2.badge-primary= cp.dist
+              when 3
+                span.badge.badge-small.badge-pill.ml-2.badge-warning= cp.dist
+          p= cp.text
