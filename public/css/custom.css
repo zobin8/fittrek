@@ -1,0 +1,46 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+.map {
+    width: 100%;
+    position: relative;
+}
+
+.progress {
+    height: 2em !important;
+}
+
+.badge-small {
+    font-size: 50% !important;
+    vertical-align: middle !important;
+}
+
+.copyright {
+    position: relative;
+    top: -28px;
+    left: 0px;
+    height: 19px;
+}
+
+.copyright-container {
+    margin-bottom: -40px;
+}
+
+.img-source {
+    position: absolute;
+    width: 100%;
+}

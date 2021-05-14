@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Delete your account
+  p If you delete your account, all data FitTrek stores about you will be removed from the database and you will be signed out. This action is not reversible.
+  .container.p-3.text-center
+    case logged_in
+      when true
+        form(action='/auth/delete',method='POST')
+          input(type='hidden',name='_csrf',value=`${csrf}`)
+          button.btn.btn-danger(type='submit') Delete my FitTrek Account
+      when false
+        button.btn.btn-danger.disabled Delete my FitTrek Account
+        p You must be signed in to delete your account.
