@@ -3,7 +3,7 @@ module.exports.displaydist = function displaydist(x) {
         return x + 'm';
     } else {
         x /= 1000;
-        return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 2 }).format(x) + 'km';
+        return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(x) + 'km';
     }
 }
 
