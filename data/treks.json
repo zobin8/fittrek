@@ -9,21 +9,21 @@
         "checkpoints": [
             {
                 "name": "Avalon",
-                "text": "Avalon is the only official city on the island, and is inhabited by a few thousand people. Its main source of business is tourism.",
+                "text": "",
                 "dist": 0,
                 "x": 881,
                 "y": 580
             },
             {
                 "name": "Catalina Airport",
-                "text": "While privately-owned, this airport is open to the public. It is one of the main sources of supplies for the island.",
+                "text": "",
                 "dist": 16000,
                 "x": 624,
                 "y": 364
             },
             {
                 "name": "Two Harbors",
-                "text": "This small village, much like Avalon, makes most of its business from tourism. A ferry takes passengers from here to Avalon, though some tourists prefer to hike.",
+                "text": "",
                 "dist": 29000,
                 "x": 382,
                 "y": 236
@@ -40,35 +40,35 @@
         "checkpoints": [
             {
                 "name": "Grand Canyon Village",
-                "text": "Home to only a few thousand people, this village is the start of many hikes through and around the canyon.",
+                "text": "",
                 "dist": 0,
                 "x": 143,
                 "y": 606
             },
             {
                 "name": "Skeleton Point",
-                "text": "The South Kaibab Trail takes one from the canyon rim to Skeleton Point. This trail is rather difficult, but features spectacular views at its destination.",
+                "text": "",
                 "dist": 11000,
                 "x": 288,
                 "y": 508
             },
             {
                 "name": "Phantom Ranch",
-                "text": "Located in the middle of the canyon, the Phantom Ranch oasis offers lodging to hikers and other people passing through the bottom of the canyon.",
+                "text": "",
                 "dist": 17800,
                 "x": 273,
                 "y": 425
             },
             {
                 "name": "Ribbon Falls",
-                "text": "Ribbon Falls are home to lush waterfalls in the canyon's bottom. Since the area is fragile, it is important to leave no trace and stay on the trails.",
+                "text": "",
                 "dist": 26900,
                 "x": 381,
                 "y": 229
             },
             {
                 "name": "North Rim",
-                "text": "North Rim marks the trailhead of the North Kaibab Trail, which leads to the Ribbon Falls. Much like its southern variant, the trail is quite difficult.",
+                "text": "",
                 "dist": 40900,
                 "x": 400,
                 "y": 85
@@ -85,35 +85,35 @@
         "checkpoints": [
             {
                 "name": "Drôme River",
-                "text": "Hannibal's forces arrived here from Spain, after crossing the Rhône River. This is where some historians believe his route through the Alps began.",
+                "text": "",
                 "dist": 0,
                 "x": 112,
                 "y": 473
             },
             {
                 "name": "Saint-Étienne-en-Dévoluy Mountain Region",
-                "text": "One of the first major Alpine mountains in Hannibal's way since the Drôme River.",
+                "text": "",
                 "dist": 53000,
                 "x": 219,
                 "y": 518
             },
             {
                 "name": "Durance River",
-                "text": "Hannibal was believed by some to have followed this river on the way to the mountain pass. In modern day, this river is close to a popular ski resort.",
+                "text": "",
                 "dist": 99000,
                 "x": 421,
                 "y": 543
             },
             {
                 "name": "Col de la Traversette",
-                "text": "Archeology suggests that this pass was almost certainly on Hannibal's route. Both biological evidence and disturbances in the ground carbon-dated to this time were found here. This also marks the modern-day border between France and Italy.",
+                "text": "",
                 "dist": 169000,
                 "x": 622,
                 "y": 463
             },
             {
                 "name": "Modern Turin",
-                "text": "When they finished the descent from the Alps, they captured a settlement in modern-day Turin. At this point, the Romans are cancelling their plans to invade Carthage. Hannibal would go on to battle throughout Italy.",
+                "text": "",
                 "dist": 200000,
                 "x": 816,
                 "y": 310
@@ -130,49 +130,49 @@
         "checkpoints": [
             {
                 "name": "Savvor",
-                "text": "Our journey begins in the small port of Savvor. There, our heroes met after traveling from distant lands via boat. They chose to set out toward the capitol, taking the fastest and most dangerous path.",
+                "text": "",
                 "dist": 0,
                 "x": 413,
                 "y": 671
             },
             {
                 "name": "The edge of the steppe",
-                "text": "Traveling up the Savvor river, the climate changes to be drier, emptier, and more hostile. Our heroes stick close to the river, hoping it will offer some protection from the elements. Unfortunately, they find that there is something strange about the water. It has made the local toads grow large and deadly, and find themselves in great peril.",
+                "text": "",
                 "dist": 48000,
                 "x": 440,
                 "y": 595
             },
             {
                 "name": "Foot of the mountains",
-                "text": "The party reaches the river's spring. A vast wasteland now sits between them and their goal. The real journey has begun.",
+                "text": "",
                 "dist": 106000,
                 "x": 482,
                 "y": 552
             },
             {
                 "name": "The living oasis",
-                "text": "In the center of the island, our heroes find respite in a small oasis. Yet, the water is perilous, as it is alive. It rears up like a great beast and attempts to drown the party. Luckily, they manage to evaporate the water before it can do any real harm. Setting out to the second half of the journey now, a brewing storm can be seen in the Northeast.",
+                "text": "",
                 "dist": 145000,
                 "x": 520,
                 "y": 495
             },
             {
                 "name": "Brieve",
-                "text": "At the foot of the Skypiercer mountain, a small mining town known as Brieve provides a much-needed rest for the party. ",
+                "text": "",
                 "dist": 193000,
                 "x": 565,
                 "y": 430
             },
             {
                 "name": "The Sovalar River",
-                "text": "Heading down the river towards the capitol city of Voscar, a great storm can be seen growing on the horizon. Its tendrils of cloud stretch far and wide, covering the city in a dense fog.",
+                "text": "",
                 "dist": 232000,
                 "x": 650,
                 "y": 400
             },
             {
                 "name": "Sovalar",
-                "text": "Having completed their journey, the tired adventurers travel through the deep fog of the city. A strange disease seems to afflicting the citizens, and those that fall to it seem to drown. Something looms over the capital, and the adventurers are set on uncovering it.",
+                "text": "",
                 "dist": 290000,
                 "x": 700,
                 "y": 360
