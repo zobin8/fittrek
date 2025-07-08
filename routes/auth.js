@@ -12,16 +12,20 @@ router.get('/google/callback', passport.authenticate('google', { successRedirect
 router.post('/delete', async function(req, res, next) {
     if (req.user) {
         await User.deleteOne({openid: req.user.openid});
-        req.logout();
-        res.redirect('/');
+        req.logout((err) => {
+            if (err) { return next(err); };
+            res.redirect('/');
+        });
     } else {
         res.redirect('/delete');
     }
 });
 
 router.post('/logout', function(req, res, next) {
-    req.logout();
-    res.redirect('/');
+    req.logout((err) => {
+        if (err) { return next(err); };
+        res.redirect('/');
+    });
 });
 
 
