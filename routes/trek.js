@@ -1,11 +1,12 @@
 var express = require('express');
+const asyncHandler = require("express-async-handler");
 var createError = require('http-errors');
 var router = express.Router();
 var treks = require('../data/treks');
 var progress = require('../models/progress');
 var util = require('../src/util');
 
-function setlocals(req, res, t, next) {
+async function setlocals(req, res, t, next) {
     res.locals.title = t.name;
     res.locals.trek = req.params['trek'];
     res.locals.image = "/public/images/" + t.image;
@@ -16,22 +17,24 @@ function setlocals(req, res, t, next) {
     res.locals.mapheight = t.height;
     res.locals.checkpoints = [];
 
+    res.locals._balance = 0;
+    res.locals._currdist = 0;
+    res.locals._apply = 0;
+
     if (req.user) {
-        Progress.findOrCreate({openid: req.user.openid, trek: res.locals.trek}, {}, function (err, progress) {
-            res.locals._balance = req.user.distance;
-            res.locals._currdist = progress.distance;
-            res.locals._apply = Math.min(res.locals._balance, res.locals._maxdist - res.locals._currdist);
-            processlocals(req, res, t, next)
-        });
-    } else {
-        res.locals._balance = 0;
-        res.locals._currdist = 0;
-        res.locals._apply = 0;
-        processlocals(req, res, t, next);
+        const prog = await progress.findOne({openid: req.user.openid, trek: res.locals.trek});
+        if(prog) {
+            res.locals._currdist = prog.distance;
+        }
+
+        res.locals._balance = req.user.distance;
+        res.locals._apply = Math.min(res.locals._balance, res.locals._maxdist - res.locals._currdist);
     }
+
+    await processlocals(req, res, t, next);
 }
 
-function processlocals(req, res, t, next) {
+async function processlocals(req, res, t, next) {
     res.locals.balance = util.displaydist(res.locals._balance);
     res.locals.apply = util.displaydist(res.locals._apply);
     res.locals.applypct = 100 * res.locals._apply / res.locals._maxdist;
@@ -52,29 +55,26 @@ function processlocals(req, res, t, next) {
         res.locals.checkpoints.push({name: cpt.name, dist: dist, text: cpt.text, state: state});
     });
 
-    next(req, res);
+    await next(req, res);
 }
 
-function applydist(req, res) {
-    var query = {openid: req.user.openid, trek: res.locals.trek};
-    Progress.findOrCreate(query, {}, function (err, progress) {
-        if (err) {
-            next(createError(500));
-        } else {
-            var applydist = req.user.distance;
-            if (applydist + progress.distance > res.locals._maxdist) {
-                applydist = res.locals._maxdist - progress.distance;
-            }
-            progress.distance += applydist;
-            req.user.distance -= applydist;
-            progress.save();
-            req.user.save();
-            res.redirect('/trek/view/' + res.locals.trek);
-        }
-    });
+async function applydist(req, res) {
+    const query = {openid: req.user.openid, trek: res.locals.trek};
+    const options = {upsert: true, new: true};
+    var prog = await progress.findOneAndUpdate(query, {}, options);
+
+    var applydist = req.user.distance;
+    if (applydist + prog.distance > res.locals._maxdist) {
+        applydist = res.locals._maxdist - prog.distance;
+    }
+    prog.distance += applydist;
+    req.user.distance -= applydist;
+    prog.save();
+    req.user.save();
+    res.redirect('/trek/view/' + res.locals.trek);
 }
 
-router.post('/apply/:trek', function(req, res, next) {
+router.post('/apply/:trek', asyncHandler( async (req, res, next) => {
     var req_trek = req.params['trek'];
     
     if (!req.user) {
@@ -88,10 +88,10 @@ router.post('/apply/:trek', function(req, res, next) {
 
     var t = treks[req_trek];
 
-    setlocals(req, res, t, applydist);
-});
+    await setlocals(req, res, t, applydist);
+}));
 
-router.get('/view/:trek', async function(req, res, next) {
+router.get('/view/:trek', asyncHandler(async (req, res, next) => {
     var req_trek = req.params['trek'];
 
     if (!(req_trek in treks)) {
@@ -101,10 +101,10 @@ router.get('/view/:trek', async function(req, res, next) {
 
     var t = treks[req_trek];
 
-    setlocals(req, res, t, (req, res) => res.render('trek'));
-});
+    await setlocals(req, res, t, (req, res) => res.render('trek'));
+}));
 
-router.get('/data/:trek', function(req, res, next) {
+router.get('/data/:trek', asyncHandler(async (req, res, next) => {
     var req_trek = req.params['trek'];
 
     if (!(req_trek in treks)) {
@@ -114,7 +114,7 @@ router.get('/data/:trek', function(req, res, next) {
 
     var t = treks[req_trek];
 
-    setlocals(req, res, t, (req, res) => {
+    await setlocals(req, res, t, (req, res) => {
         let data = Object.assign({}, t);
         if (req.user) {
             data.currdist = res.locals._currdist;
@@ -125,27 +125,27 @@ router.get('/data/:trek', function(req, res, next) {
         }
         res.json(data);
     });
-});
+}));
 
-router.get('/data-all', function(req, res, next) {
+router.get('/data-all', asyncHandler(async (req, res, next) => {
     if (req.user) {
         let data = Object.assign({}, treks);
-        Progress.find({openid: req.user.openid}, function (err, docs) {
-            if (err) {
-                next(createError(500));
-                return;
-            }
-            for (var i = 0; i < docs.length; i++) {
-                var doc = docs[i];
-                data[doc.trek] = Object.assign({}, treks[doc.trek]);
-                data[doc.trek].currdist = doc.distance;
-                data[doc.trek].apply = Math.min(req.user.distance, data[doc.trek].dist - doc.distance);
-            }
-            res.json(data);
-        });
+        const docs = await progress.find({openid: req.user.openid});
+        if (docs == null) {
+            next(createError(500));
+            return;
+        }
+
+        for (var i = 0; i < docs.length; i++) {
+            var doc = docs[i];
+            data[doc.trek] = Object.assign({}, treks[doc.trek]);
+            data[doc.trek].currdist = doc.distance;
+            data[doc.trek].apply = Math.min(req.user.distance, data[doc.trek].dist - doc.distance);
+        }
+        res.json(data);
     } else {
         res.json(treks);
     }
-});
+}));
 
 module.exports = router;
