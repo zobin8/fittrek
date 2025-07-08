@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const findOrCreate = require('mongoose-find-or-create')
 
 const ProgressSchema = new mongoose.Schema(
     {
@@ -17,8 +16,6 @@ const ProgressSchema = new mongoose.Schema(
         }
     }
 );
-
-ProgressSchema.plugin(findOrCreate);
 
 ProgressSchema.index({openid: 1, trek: 1}, {unique: true});
 

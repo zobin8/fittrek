@@ -2,7 +2,7 @@ require("dotenv").config();
 var createError = require('http-errors');
 var express = require('express');
 var passport = require('passport');
-var session = require('cookie-session')
+var session = require('express-session')
 var path = require('path');
 const csurf = require('csurf');
 var cookieParser = require('cookie-parser');
@@ -25,12 +25,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Database
-mongoose.set('useFindAndModify', false);
-mongoose.connect('mongodb://localhost/fittrek', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/fittrek');
 
 // Sessions
 app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(session({secret: process.env.SESSION_SECRET, name: 'sessionid', secure: true}));
+app.use(session({secret: process.env.SESSION_SECRET, cookie: {secure: true} }));
 
 // Configure Passport
 app.use(passport.initialize());

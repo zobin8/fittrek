@@ -8,22 +8,29 @@ passport.serializeUser(function(user, done) {
     done(null, user.openid);
 });
 
-passport.deserializeUser(function(user, done) {
-    User.findOne({openid: user}, function(err, user) {
-        done(err, user);
-    });
+passport.deserializeUser(async function(user, done) {
+    return await User.findOne({openid: user})
+    .then((user) => done(null, user))
+    .catch(done);
 });
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK,
-    passReqToCallback: true
 },
-function(request, accessToken, refreshToken, profile, done) {
-    User.findOrCreate({openid: profile.id}, {name: profile.displayName, token: accessToken}, async function (err, user) {
+async function(accessToken, refreshToken, profile, done) {
+    return await User.findOneAndUpdate(
+        {openid: profile.id},
+        {$set: {name: profile.displayName, token: accessToken}},
+        {upsert: true, new: true})
+    .then(async (user) => {
         await fitdata.sync(user);
-        return done(err, user);
+        return done(null, user);
+    })
+    .catch(async (err) => {
+        console.log(err)
+        return done(err);
     });
 }
 ));
