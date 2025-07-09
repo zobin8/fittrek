@@ -32,5 +32,5 @@ docker-compose up -d --build
 This repository uses ESLint.
 
 ```
-npx lint
+npx eslint
 ```
