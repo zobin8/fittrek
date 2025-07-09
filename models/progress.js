@@ -19,4 +19,4 @@ const ProgressSchema = new mongoose.Schema(
 
 ProgressSchema.index({openid: 1, trek: 1}, {unique: true});
 
-module.exports = Progress = mongoose.model("progress", ProgressSchema);
+module.exports = mongoose.model("progress", ProgressSchema);
