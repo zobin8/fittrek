@@ -2,7 +2,7 @@ server {
     server_name fit.zkrueger.com;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://backend:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -12,7 +12,7 @@ server {
     }
 
     location /public {
-        root /usr/share/nginx/fittrek;
+        root /usr/share/nginx/html;
     }
 
     listen 80 default_server;

@@ -1,12 +1,20 @@
 services:
-  web:
-    image: fittrek
+  backend:
+    image: fittrek-backend
     build:
       context: .
-      dockerfile: ./deploy/Dockerfile
+      dockerfile: ./deploy/backend.Dockerfile
       network: host
     ports:
-      - "3000:3000"
+      - "3000"
+
+  nginx:
+    image: fittrek-nginx
+    build:
+      context: .
+      dockerfile: ./deploy/nginx.Dockerfile
+    ports:
+      - "8756:80"
 
   db:
     image: mongo:latest
