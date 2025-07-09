@@ -3,11 +3,11 @@ var router = express.Router();
 var treks = require('../data/treks');
 var util = require('../src/util')
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     res.locals.treks = []
 
     for (var name in treks) {
-        t = treks[name];
+        var t = treks[name];
         var trek = {};
         trek.name = t.name;
         trek.href = '/trek/view/' + name;

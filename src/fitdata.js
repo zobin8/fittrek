@@ -20,10 +20,10 @@ async function syncRange(user, start, stop) {
             endTimeMillis: stop
         }
     }).then(async function (res) {
-        res.data.bucket.forEach(function (item, index) {
-            item.dataset.forEach(function (data, index1) {
-                data.point.forEach(function (point, index2) {
-                    point.value.forEach(function (value, index3) {
+        res.data.bucket.forEach(function (item) {
+            item.dataset.forEach(function (data) {
+                data.point.forEach(function (point) {
+                    point.value.forEach(function (value) {
                         if (value.fpVal) {
                             distance += value.fpVal;
                         }
@@ -49,7 +49,7 @@ const sync = async function(user) {
     }
 
     while (now > last) {
-        next = Math.min(now, last + 864000000)
+        let next = Math.min(now, last + 864000000)
         let synced = await syncRange(user, last, next)
         distance += synced
         last = next

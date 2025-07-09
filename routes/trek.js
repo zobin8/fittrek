@@ -42,7 +42,7 @@ async function processlocals(req, res, t, next) {
     res.locals.currpct = 100 * res.locals._currdist / res.locals._maxdist;
     res.locals.complete = res.locals._currdist == res.locals._maxdist;
 
-    t.checkpoints.forEach((cpt, i) => {
+    t.checkpoints.forEach((cpt) => {
         var dist = cpt.dist == 0 ? 'start' : util.displaydist(cpt.dist);
         var state = 0;
         if (res.locals.complete) {
