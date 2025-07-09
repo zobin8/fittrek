@@ -1,0 +1,18 @@
+services:
+  web:
+    image: fittrek
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+      network: host
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://db:27017/
+    volumes:
+      - ./db:/data/db
