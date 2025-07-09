@@ -49,15 +49,17 @@ function loadtrek(name, data) {
     }
 }
 
+/* exported loadone */
 function loadone(name) {
-    $.get("/trek/data/" + name, function(data, status) {
+    $.get("/trek/data/" + name, function(data) {
         loadtrek(name, data);
     });
 }
 
+/* exported loadall */
 function loadall() {
-    $.get("/trek/data-all", function(data, status) {
-        for (trek in data) {
+    $.get("/trek/data-all", function(data) {
+        for (let trek in data) {
             loadtrek(trek, data[trek]);
         }
     });
