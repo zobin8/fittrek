@@ -30,6 +30,65 @@
             }
         ]
     },
+    "curiosity-rover": {
+        "name": "Curiosity Mars Rover",
+        "image": "curiosity.png",
+        "dist": 35000,
+        "width": 705,
+        "height": 617,
+        "copyright": "nasa",
+        "checkpoints": [
+            {
+                "name": "Bradbury Landing",
+                "text": "",
+                "dist": 0,
+                "x": 445,
+                "y": 32
+            },
+            {
+                "name": "Dingo Gap",
+                "text": "",
+                "dist": 6000,
+                "x": 352,
+                "y": 123
+            },
+            {
+                "name": "Pahrump Hills",
+                "text": "",
+                "dist": 11000,
+                "x": 268,
+                "y": 216
+            },
+            {
+                "name": "Murray Buttes",
+                "text": "",
+                "dist": 16000,
+                "x": 207,
+                "y": 291
+            },
+            {
+                "name": "Mary Anning",
+                "text": "",
+                "dist": 23000,
+                "x": 318,
+                "y": 389
+            },
+            {
+                "name": "Gediz Vallis",
+                "text": "",
+                "dist": 32000,
+                "x": 348,
+                "y": 530
+            },
+            {
+                "name": "Current Location",
+                "text": "",
+                "dist": 35000,
+                "x": 275,
+                "y": 571
+            }
+        ]
+    },
     "grand-canyon": {
         "name": "Grand Canyon Rim-to-Rim",
         "image": "grand_canyon.png",
@@ -72,6 +131,51 @@
                 "dist": 40900,
                 "x": 400,
                 "y": 85
+            }
+        ]
+    },
+    "inca-trail": {
+        "name": "Inca Trail",
+        "image": "inca_trail.png",
+        "dist": 43000,
+        "width": 1162,
+        "height": 831,
+        "copyright": "osm",
+        "checkpoints": [
+            {
+                "name": "Cusco",
+                "text": "",
+                "dist": 0,
+                "x": 912,
+                "y": 517
+            },
+            {
+                "name": "Wayllabamba",
+                "text": "",
+                "dist": 12000,
+                "x": 705,
+                "y": 708
+            },
+            {
+                "name": "Pacaymayo",
+                "text": "",
+                "dist": 23000,
+                "x": 414,
+                "y": 544
+            },
+            {
+                "name": "Wiñay Huayna",
+                "text": "",
+                "dist": 39000,
+                "x": 160,
+                "y": 244
+            },
+            {
+                "name": "Machu Picchu",
+                "text": "",
+                "dist": 43000,
+                "x": 129,
+                "y": 123
             }
         ]
     },
