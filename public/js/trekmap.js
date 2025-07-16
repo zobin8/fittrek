@@ -25,7 +25,7 @@ function drawPath(ctx, data, dist) {
 }
 
 function loadtrek(name, data) {
-    var c = document.getElementById('map-' + name);
+    var c = $('#map-' + name).get(0);
     var ctx = c.getContext("2d");
 
     ctx.lineWidth = c.getAttribute("width") / 50;
