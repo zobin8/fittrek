@@ -6,15 +6,15 @@ var treks = require('../data/treks');
 var progress = require('../models/progress');
 var util = require('../src/util');
 
-async function setlocals(req, res, t, next) {
-    res.locals.title = t.name;
+async function setlocals(req, res, next) {
+    res.locals.title = res.locals.trek_data.name;
     res.locals.trek = req.params['trek'];
-    res.locals.image = "/public/images/" + t.image;
-    res.locals.copyright = t.copyright;
-    res.locals.maxdist = util.displaydist(t.dist);
-    res.locals._maxdist = t.dist;
-    res.locals.mapwidth = t.width;
-    res.locals.mapheight = t.height;
+    res.locals.image = "/public/images/" + res.locals.trek_data.image;
+    res.locals.copyright = res.locals.trek_data.copyright;
+    res.locals.maxdist = util.displaydist(res.locals.trek_data.dist);
+    res.locals._maxdist = res.locals.trek_data.dist;
+    res.locals.mapwidth = res.locals.trek_data.width;
+    res.locals.mapheight = res.locals.trek_data.height;
     res.locals.checkpoints = [];
 
     res.locals._balance = 0;
@@ -31,10 +31,10 @@ async function setlocals(req, res, t, next) {
         res.locals._apply = Math.min(res.locals._balance, res.locals._maxdist - res.locals._currdist);
     }
 
-    await processlocals(req, res, t, next);
+    processlocals(req, res, next);
 }
 
-async function processlocals(req, res, t, next) {
+function processlocals(req, res, next) {
     res.locals.balance = util.displaydist(res.locals._balance);
     res.locals.apply = util.displaydist(res.locals._apply);
     res.locals.applypct = 100 * res.locals._apply / res.locals._maxdist;
@@ -42,7 +42,7 @@ async function processlocals(req, res, t, next) {
     res.locals.currpct = 100 * res.locals._currdist / res.locals._maxdist;
     res.locals.complete = res.locals._currdist == res.locals._maxdist;
 
-    t.checkpoints.forEach((cpt) => {
+    res.locals.trek_data.checkpoints.forEach((cpt) => {
         var dist = cpt.dist == 0 ? 'start' : util.displaydist(cpt.dist);
         var state = 0;
         if (res.locals.complete) {
@@ -55,7 +55,7 @@ async function processlocals(req, res, t, next) {
         res.locals.checkpoints.push({name: cpt.name, dist: dist, text: cpt.text, state: state});
     });
 
-    await next(req, res);
+    next();
 }
 
 async function applydist(req, res) {
@@ -74,7 +74,7 @@ async function applydist(req, res) {
     res.redirect('/trek/view/' + res.locals.trek);
 }
 
-router.post('/apply/:trek', asyncHandler( async (req, res, next) => {
+router.post('/apply/:trek', asyncHandler(async (req, res, next) => {
     var req_trek = req.params['trek'];
     
     if (!req.user) {
@@ -86,10 +86,9 @@ router.post('/apply/:trek', asyncHandler( async (req, res, next) => {
         return;
     }
 
-    var t = treks[req_trek];
-
-    await setlocals(req, res, t, applydist);
-}));
+    res.locals.trek_data = treks[req_trek];
+    next();
+}), asyncHandler(setlocals), asyncHandler(applydist));
 
 router.get('/view/:trek', asyncHandler(async (req, res, next) => {
     var req_trek = req.params['trek'];
@@ -99,10 +98,9 @@ router.get('/view/:trek', asyncHandler(async (req, res, next) => {
         return;
     }
 
-    var t = treks[req_trek];
-
-    await setlocals(req, res, t, (req, res) => res.render('trek'));
-}));
+    res.locals.trek_data = treks[req_trek];
+    next();
+}), asyncHandler(setlocals), (req, res) => res.render('trek'));
 
 router.get('/data/:trek', asyncHandler(async (req, res, next) => {
     var req_trek = req.params['trek'];
@@ -112,10 +110,10 @@ router.get('/data/:trek', asyncHandler(async (req, res, next) => {
         return;
     }
 
-    var t = treks[req_trek];
-
-    await setlocals(req, res, t, (req, res) => {
-        let data = Object.assign({}, t);
+    res.locals.trek_data = treks[req_trek];
+    next();
+}), asyncHandler(setlocals), (req, res) => {
+        let data = Object.assign({}, res.locals.trek_data);
         if (req.user) {
             data.currdist = res.locals._currdist;
             data.apply = res.locals._apply;
@@ -124,8 +122,8 @@ router.get('/data/:trek', asyncHandler(async (req, res, next) => {
             data.apply = -1;
         }
         res.json(data);
-    });
-}));
+    }
+);
 
 router.get('/data-all', asyncHandler(async (req, res, next) => {
     if (req.user) {
