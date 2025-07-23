@@ -3,6 +3,7 @@ const User = require('../models/users')
 
 async function syncRange(user, start, stop) {
     var distance = 0.0
+    return 0;
     await axios({
         method: "POST",
         url: "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",

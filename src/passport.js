@@ -1,6 +1,6 @@
 require("dotenv").config();
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 const User = require('../models/users');
 const fitdata = require('./fitdata');
 
@@ -14,10 +14,10 @@ passport.deserializeUser(async function(user, done) {
     .catch(done);
 });
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK,
+passport.use(new FitbitStrategy({
+    clientID: process.env.FITBIT_CLIENT_ID,
+    clientSecret: process.env.FITBIT_CLIENT_SECRET,
+    callbackURL: process.env.FITBIT_CALLBACK,
 },
 async function(accessToken, refreshToken, profile, done) {
     return await User.findOneAndUpdate(

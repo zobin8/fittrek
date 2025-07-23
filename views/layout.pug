@@ -14,7 +14,7 @@ html
           a.navbar-brand(href='/').text-light FitTrek
           case logged_in
             when false
-              form(action='/auth/google',method='POST')
+              form(action='/auth/fitbit',method='POST')
                 input(type='hidden',name='_csrf',value=`${csrf}`)
                 button.navbar-item(type='submit').py-2.btn.btn-light Sign in
             when true
