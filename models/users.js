@@ -11,12 +11,12 @@ const UserSchema = new mongoose.Schema(
             type: String,
             default: "User"
         },
-        lastsync: {
-            type: Number,
-            default: 0
-        },
         token: {
             type: String
+        },
+        total_distance: {
+            type: Number,
+            default: 0
         },
         distance: {
             type: Number,

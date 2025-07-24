@@ -1,37 +1,21 @@
 const axios = require('axios');
 const User = require('../models/users')
 
-async function syncRange(user, start, stop) {
+async function syncTotal(user) {
     var distance = 0.0
-    return 0;
+
     await axios({
-        method: "POST",
-        url: "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",
+        method: "GET",
+        url: `https://api.fitbit.com/1/user/${user.openid}/activities.json`,
         headers: {
             "Content-Type": "application/json;encoding=utf-8",
-            "Authorization": "Bearer " + user.token
+            "Authorization": "Bearer " + user.token,
+            "Accept": "application/json"
         },
-        data: {
-            aggregateBy: [{
-                "dataTypeName": "com.google.distance.delta",
-                "dataSourceId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
-            }],
-            bucketByTime: { "durationMillis": stop - start },
-            startTimeMillis: start,
-            endTimeMillis: stop
-        }
     }).then(async function (res) {
-        res.data.bucket.forEach(function (item) {
-            item.dataset.forEach(function (data) {
-                data.point.forEach(function (point) {
-                    point.value.forEach(function (value) {
-                        if (value.fpVal) {
-                            distance += value.fpVal;
-                        }
-                    })
-                })
-            });
-        });
+        var total_m = (res?.data?.lifetime?.total?.distance || 0) * 1000;
+        distance = Math.max(0, total_m - user.total_distance);
+        console.log(res.data.lifetime.total);
     }).catch(function (err) {
         console.log(err);
         console.log(err.response.data.error);
@@ -41,24 +25,12 @@ async function syncRange(user, start, stop) {
 }
 
 const sync = async function(user) {
-    const now = Date.now() - 14400000;
-    var last = user.lastsync > 0 ? user.lastsync : now - 86400000;
-    var distance = 0.0;
+    var distance = await syncTotal(user);
 
-    if (last + 14400000 > now) {
-        return;
-    }
-
-    while (now > last) {
-        let next = Math.min(now, last + 864000000)
-        let synced = await syncRange(user, last, next)
-        distance += synced
-        last = next
-    }
-
-    var newTotal = user.distance + Math.round(distance);
-    user.distance = newTotal;
-    await User.findOneAndUpdate({openid: user.openid}, {distance: newTotal, lastsync: now});    
+    await User.findOneAndUpdate(
+        {openid: user.openid},
+        {distance: user.distance + distance, total_distance: user.total_distance + distance}
+    );
 }
 
 exports.sync = sync;
