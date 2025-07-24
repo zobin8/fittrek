@@ -15,7 +15,6 @@ async function syncTotal(user) {
     }).then(async function (res) {
         var total_m = (res?.data?.lifetime?.total?.distance || 0) * 1000;
         distance = Math.max(0, total_m - user.total_distance);
-        console.log(res.data.lifetime.total);
     }).catch(function (err) {
         console.log(err);
         console.log(err.response.data.error);
@@ -29,7 +28,7 @@ const sync = async function(user) {
 
     await User.findOneAndUpdate(
         {openid: user.openid},
-        {distance: user.distance + distance, total_distance: user.total_distance + distance}
+        {$inc: {distance: distance, total_distance: distance}},
     );
 }
 

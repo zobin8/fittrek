@@ -1,9 +1,11 @@
 var express = require('express');
 const asyncHandler = require("express-async-handler");
 var createError = require('http-errors');
+var mongoose = require('mongoose');
 var router = express.Router();
 var treks = require('../data/treks');
 var progress = require('../models/progress');
+var user = require('../models/users');
 var util = require('../src/util');
 
 async function setlocals(req, res, next) {
@@ -67,10 +69,15 @@ async function applydist(req, res) {
     if (applydist + prog.distance > res.locals._maxdist) {
         applydist = res.locals._maxdist - prog.distance;
     }
-    prog.distance += applydist;
-    req.user.distance -= applydist;
-    prog.save();
-    req.user.save();
+    
+    const session = await mongoose.startSession();
+    await session.withTransaction(
+        async () => user.findOneAndUpdate({openid: req.user.openid}, {$inc: {distance: -applydist}}, {new: true})
+        .then((foundUser) => {console.log(foundUser); if (foundUser.distance < 0) throw new Error ('Double spend in user distance.')})
+        .then(() => progress.findOneAndUpdate(query, {$inc: {distance: applydist}}))
+        .then(() => session.endSession())
+    );
+
     res.redirect('/trek/view/' + res.locals.trek);
 }
 
