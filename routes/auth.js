@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var User = require('../models/users');
+var Progress = require('../models/progress');
 require('../src/passport');
 var router = express.Router();
 
@@ -11,6 +12,7 @@ router.get('/fitbit/callback', passport.authenticate('fitbit', { successRedirect
 router.post('/delete', async function(req, res, next) {
     if (req.user) {
         await User.deleteOne({openid: req.user.openid});
+        await Progress.deleteMany({openid: req.user.openid});
         req.logout((err) => {
             if (err) { return next(err); };
             res.redirect('/');
