@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: ./deploy/backend.Dockerfile
       network: host
+    restart: always
     ports:
       - "3000"
 
@@ -13,6 +14,7 @@ services:
     build:
       context: .
       dockerfile: ./deploy/nginx.Dockerfile
+    restart: always
     ports:
       - "8756:80"
 
@@ -20,6 +22,7 @@ services:
     image: mongo:latest
     ports:
       - "27017"
+    restart: always
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://db:27017/
     volumes:
