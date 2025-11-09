@@ -20,8 +20,6 @@ services:
 
   db:
     image: mongo:latest
-    ports:
-      - "27017"
     restart: always
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://db:27017/
